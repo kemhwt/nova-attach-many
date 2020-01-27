@@ -27,6 +27,8 @@ class AttachMany extends Field
 
     public $showOnDetail = false;
 
+    public $extraFields = [];
+
     public $component = 'nova-attach-many';
 
     public function __construct($name, $attribute = null, $resource = null)
@@ -44,9 +46,34 @@ class AttachMany extends Field
         $this->fillUsing(function($request, $model, $attribute, $requestAttribute) use($resource) {
             if(is_subclass_of($model, 'Illuminate\Database\Eloquent\Model')) {
                 $model::saved(function($model) use($attribute, $request) {
+                    error_log('LOG_1');
+                    error_log($request->$attribute);
+                    error_log($attribute);
+                    error_log($request->quantities);
+//                    $items = json_decode($request->$attribute, true);
+//                    $attaches = [];
+//                    foreach ($items as $item) {
+//                        array_push($attaches, [
+//                            'contract_id' => $model->id,
+//
+//                        ]);
+//                    }
+
+                    $quantities = json_decode($request->quantities);
+                    $array = json_decode($request->$attribute, true);
+                    $processes = [];
+                    foreach ($array as $item) {
+                        $processes[$item] = ['quantity' => $quantities->$item];
+                    }
+
                     $model->$attribute()->sync(
-                        json_decode($request->$attribute, true)
+//                        json_decode($request->$attribute, true)
+                        $processes
                     );
+
+//                    $model->$attribute()->saveMany(
+//                        json_decode($request->$attribute, true)
+//                    );
                 });
 
                 unset($request->$attribute);
@@ -70,7 +97,8 @@ class AttachMany extends Field
             'fullWidth' => $this->fullWidth,
             'showCounts' => $this->showCounts,
             'showPreview' => $this->showPreview,
-            'showToolbar' => $this->showToolbar
+            'showToolbar' => $this->showToolbar,
+            'extraFields' => $this->extraFields
         ]);
     }
 
@@ -120,6 +148,13 @@ class AttachMany extends Field
     public function showPreview($showPreview=true)
     {
         $this->showPreview = $showPreview;
+
+        return $this;
+    }
+
+    public function extraFields($fieldNames=[])
+    {
+        $this->extraFields = $fieldNames;
 
         return $this;
     }
