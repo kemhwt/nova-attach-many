@@ -91,7 +91,7 @@ export default {
             available: [],
             preview: false,
             loading: true,
-            quantities: []
+            quantities: {}
         }
     },
     methods: {
@@ -105,7 +105,7 @@ export default {
                         console.log(data);
                         this.selected = data.data.selected || [];
                         this.available = data.data.available || [];
-                        this.quantities = data.data.quantities || [];
+                        this.quantities = data.data.quantities || {};
                         this.loading = false;
                     });
             }
@@ -121,7 +121,7 @@ export default {
 
         fill(formData) {
             formData.append(this.field.attribute, this.value || [])
-            formData.append('quantities', JSON.stringify(this.quantities) || [])
+            formData.append('quantities', JSON.stringify(this.quantities) || {})
         },
 
         toggle(event, id){

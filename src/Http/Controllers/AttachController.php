@@ -18,9 +18,10 @@ class AttachController extends Controller
     public function edit(NovaRequest $request, $parent, $parentId, $relationship)
     {
         $relateds = $request->findResourceOrFail()->model()->{$relationship};
-        $quantities = [];
+        $quantities = (object) array();
         foreach ($relateds as $item) {
-            $quantities[$item->id] = $item->pivot->quantity;
+            $id = $item->id;
+            $quantities->$id = $item->pivot->quantity;
         }
         return [
             'selected' => $relateds->pluck('id'),
