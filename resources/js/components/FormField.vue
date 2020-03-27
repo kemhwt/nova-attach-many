@@ -32,24 +32,25 @@
                                     />
                             </div>
                         </div>
-                    </div><div v-if="loading" class="flex justify-center items-center absolute pin z-50 bg-white">
-                        <loader class="text-60" />
                     </div>
-                    <div v-else v-for="resource in resources" :key="resource.value" class="flex py-3 cursor-pointer select-none hover:bg-30">
-                        <div class="w-16 flex justify-center" @click="toggle($event, resource.value)">
-                            <fake-checkbox :checked="selected.includes(resource.value)" />
-                        </div>
-                        <span>{{ resource.display }}</span>
-                        <div v-for="extraField in field.extraFields" class="form-group row" style="min-width: 380px; margin-bottom: 0;">
-                            <label class="col-sm-3 col-form-label p-1">จำนวน: </label>
-                            <div class="col-sm-9">
-                                <input :name="extraField" :placeholder="extraField" class="form-control"
-                                       v-model="quantities[resource.value]"
-                                       style="padding: 0.1rem 0.5rem !important; margin-top: -7px;"
-                                    />
-                            </div>
-                        </div>
-                    </div>
+<!--                    <div v-if="loading" class="flex justify-center items-center absolute pin z-50 bg-white">-->
+<!--                        <loader class="text-60" />-->
+<!--                    </div>-->
+<!--                    <div v-else v-for="resource in resources" :key="resource.value" class="flex py-3 cursor-pointer select-none hover:bg-30">-->
+<!--                        <div class="w-16 flex justify-center" @click="toggle($event, resource.value)">-->
+<!--                            <fake-checkbox :checked="selected.includes(resource.value)" />-->
+<!--                        </div>-->
+<!--                        <span>{{ resource.display }}</span>-->
+<!--                        <div v-for="extraField in field.extraFields" class="form-group row" style="min-width: 380px; margin-bottom: 0;">-->
+<!--                            <label class="col-sm-3 col-form-label p-1">จำนวน: </label>-->
+<!--                            <div class="col-sm-9">-->
+<!--                                <input :name="extraField" :placeholder="extraField" class="form-control"-->
+<!--                                       v-model="quantities[resource.value]"-->
+<!--                                       style="padding: 0.1rem 0.5rem !important; margin-top: -7px;"-->
+<!--                                    />-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
             </div>
 
@@ -219,6 +220,7 @@ export default {
             }
 
             return this.available.filter((resource) => {
+                console.log(resource.display.toLowerCase(), this.search.toLowerCase())
                 return resource.display.toLowerCase().includes(this.search.toLowerCase())
             });
         },
@@ -232,6 +234,7 @@ export default {
     watch: {
         'search': {
             handler: function(search) {
+                console.log('Search', search)
                 this.checkIfSelectAllIsActive();
             }
         },
